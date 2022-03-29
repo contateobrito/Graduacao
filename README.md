@@ -1,4 +1,3 @@
 # Data_Science
- Repositório de aprendizado de Data Science!!!
-
-
+ Repositório de materias do curso de bacharel em estatística IME/USP
+ 
