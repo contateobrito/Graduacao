@@ -48,6 +48,6 @@ for j in range(2):
     data = 3
 
 df_w2 = pd.DataFrame(data = lista, columns = ['Deal_ID','B2B','FundID','Data','Status'])
-
+print(df_w2)
 '''Salvar em csv'''
-df_w2.to_csv('Data_Base/Historico_B2B.csv', encoding = 'utf-8', index = False)
+#df_w2.to_csv('Data_Base/Historico_B2B.csv', encoding = 'utf-8', index = False)
