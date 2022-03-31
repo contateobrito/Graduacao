@@ -33,6 +33,6 @@ def estima_pi(Seed = None):
         distancia = math.dist((0,0),i)
         if distancia <= 1:
             contador += 1
-    simulacao = matriz.shape[0]
-    pi = (contador/simulacao)*4
+    pi = (contador/matriz.shape[0])*4
+
     return pi
