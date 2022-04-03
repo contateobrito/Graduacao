@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import math
@@ -7,7 +7,6 @@ from scipy.stats import norm
 
 #Escreva seu nome e numero USP
 INFO = {10693250:"Danilo Brito da Silva"}
-
 def estima_pi(Seed = None):
 
     np.random.seed(Seed)
@@ -19,7 +18,7 @@ def estima_pi(Seed = None):
 
     """ Tamanho da Amostra """
     #Tamanho da amostra
-    z = norm.ppf(0.975)
+    z = norm.ppf(0.99)
     erro = 0.0005
     n = (z**2 * 0.25)/erro**2
 
@@ -36,3 +35,4 @@ def estima_pi(Seed = None):
     pi = (contador/matriz.shape[0])*4
 
     return pi
+print(estima_pi())
