@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import time
 import random
 import numpy as np
-import statistics
 from scipy.stats import beta
-
 
 #Escreva seu nome e numero USP
 INFO = {10693250:"Danilo Brito da Silva"}
 A = 0.442705074  # A = 0.rg
 B = 0.35382211892  # B = 0.cpf
+
 
 def f(x):
     """
@@ -43,7 +43,7 @@ def crude(Seed = None):
         #Incremento do tamanho da amostra
         n += 1000
 
-    return estimador   
+    return n, estimador
 
 def hit_or_miss(Seed = None):
     random.seed(Seed)
@@ -66,12 +66,11 @@ def hit_or_miss(Seed = None):
         #Variancia da distribuição binomial
         var = (estimador*(1-estimador))
         #Erro padrão do estimador
-        erro = abs(ant - estimador) / ant
-        ant = estimador
+        erro = np.sqrt(var/n)
         #Incremento do tamanho da amostra
         n += 1000
 
-    return estimador
+    return n, estimador
 
 def control_variate(Seed = None):
     random.seed(Seed)
@@ -81,7 +80,6 @@ def control_variate(Seed = None):
     Escreva o seu codigo nas proximas linhas
     """
 
-    np.random.seed(42)
     erro = n = 10000
 
     while erro > 0.0005:
@@ -111,7 +109,7 @@ def control_variate(Seed = None):
         #Incremento no tamanho da amostra
         n += 1000
 
-    return estimador_final
+    return n, estimador_final
 
 def importance_sampling(Seed = None):
     random.seed(Seed)
@@ -141,14 +139,31 @@ def importance_sampling(Seed = None):
         #Incremedo no tamanho da amostra
         n += 1000
 
-    return estimador
+    return n, estimador 
+
+inicio = time.time()
+print("\nBem-vido!\n Analise dos métodos de Monte Carlo para estimar a integração\n")
+
+dic = {"Crude":crude(),"Hit or Miss": hit_or_miss(), "Control Variate":control_variate(),"Importance Sampling":importance_sampling()}
+for i in sorted(dic, key = dic.get):
+    print("- %s com n = %d e estimador %.5f" % (i, dic[i][0], dic[i][1]))
+fim = time.time() - inicio
+print("\nTempo de programa: %.4fseg." % (fim))
 
 def main():
     #Coloque seus testes aqui
-    print(crude(42))
-    print(hit_or_miss())
-    print(control_variate())
-    print(importance_sampling())
+
+    print("Bem-vido")
+    selecao = input("Selecione e método de monte carlo,1 - Crude\n2 - Hit or Miss\n3 - Control Variates\n4 - Importance Sampling")
+
+    if selecao == 1:
+        print(crude())
+    elif selecao == 2:
+        print(hit_or_miss())
+    elif selecao == 3:
+        print(control_variate())
+    else:
+        print(importance_sampling())
 
 if __name__ == "___main__":
     main()
