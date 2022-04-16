@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import time
 import random
-from tracemalloc import start
 import numpy as np
-from scipy.stats import stats
-from scipy import integrate
+import statistics
+from scipy.stats import beta
+
 
 #Escreva seu nome e numero USP
 INFO = {10693250:"Danilo Brito da Silva"}
@@ -30,18 +29,18 @@ def crude(Seed = None):
     Escreva o seu codigo nas proximas linhas
     """
 
-    anterior = erro = n = 1000
+    erro = n = 10000
     while erro > 0.0005:
 
         #Criação da matriz uniforme de tamanho n com a função f(x) em cada termo
         matriz = f(np.random.uniform(0,1,n))
         #Média das variaveis observadas
-        estimador = 1/n * sum(matriz)
+        estimador = np.mean(matriz)
         #A média das distancias em relação ao valor central 
-        var = sum(np.square(matriz-estimador))/n 
-        #Comparativo do erro padrão do estimador anterior com o atual
+        var = np.var(matriz)
+        #Erro padrão do estimador
         erro = np.sqrt(var/n)
-        #Aumento do tamanho da amostra
+        #Incremento do tamanho da amostra
         n += 1000
 
     return estimador   
@@ -64,15 +63,15 @@ def hit_or_miss(Seed = None):
         contador = matriz[np.where(matriz[:,1] <= matriz[:,0])][:,0].size
         #Estimador que representa a area
         estimador = contador / n
-        #Variancia da distrinuição binomial
+        #Variancia da distribuição binomial
         var = (estimador*(1-estimador))
-        #Comparativo do erro padrão do estimador anterior com o atual
-        erro = np.sqrt(var/n)
-        #Aumento do tamanho da amostra
-        n += 10000
+        #Erro padrão do estimador
+        erro = abs(ant - estimador) / ant
+        ant = estimador
+        #Incremento do tamanho da amostra
+        n += 1000
 
     return estimador
-
 
 def control_variate(Seed = None):
     random.seed(Seed)
@@ -82,16 +81,37 @@ def control_variate(Seed = None):
     Escreva o seu codigo nas proximas linhas
     """
 
+    np.random.seed(42)
+    erro = n = 10000
 
+    while erro > 0.0005:
 
-    return #Retorne sua estimativa
+        #Gerador de variavel aleatória
+        va = np.random.uniform(0,1,n)
+        #Criação de um vetor com va uniforme de tamanho n com a função f(x) em cada termo
+        vetor_x = f(va)
+        #Criação de um vetor com va uniforme de tamanho n com a função g(x) = 1 - 0.4x em cada termo
+        vetor_g = va[np.where(1 - va * 0.4)]  
+        #Estimador do vetor x, média dos pontos observados
+        estimador_x = np.mean(vetor_x)
+        #Estimador do vetor g, média dos pontos observados
+        estimador_g = np.mean(vetor_g)
+        #Estimador final, média dos pontos observados
+        estimador_final = np.mean(vetor_x - vetor_g + estimador_g)
+        #Variancia do vetor de distribuição f(x) 
+        var_x = np.var(vetor_x)
+        #Variancia do vetor de distribuição g(x)
+        var_g = np.var(vetor_g)
+        #Covariancia dos vetores de distribuições f(x) e g(x)
+        cov = np.cov(vetor_x, vetor_g)[0][1]
+        #Variancia final
+        var_final = np.sqrt(abs(var_g + var_x - 2 * cov)/n)
+        #Erro padrão do estimador
+        erro = np.sqrt(var_final/n)
+        #Incremento no tamanho da amostra
+        n += 1000
 
-
-
-
-
-
-
+    return estimador_final
 
 def importance_sampling(Seed = None):
     random.seed(Seed)
@@ -100,25 +120,35 @@ def importance_sampling(Seed = None):
     usando o metodo importance sampling
     Escreva o seu codigo nas proximas linhas
     """
+    
+    a, b  = 1, 2
+    ant = erro = n = 10000
 
+    while erro > 0.0005:
 
+        #Criação de um vetor com va uniforme de tamanho n com a função f(x) em cada termo
+        vetor_x = f(np.random.uniform(0,1,n))
+        #Criação de um vetor com distribuição beta de tamanho n
+        vetor_g = beta.pdf(np.random.beta(a, b, n) ,a ,b)
+        #Estimador, média dos pontos observados
+        matriz_estimador = np.divide(vetor_x, vetor_g)
+        estimador = np.mean(matriz_estimador)
+        #Variancia
+        var = np.var(matriz_estimador)
+        #Erro padrão do estimador
+        erro = abs(ant - estimador) / ant
+        ant = estimador
+        #Incremedo no tamanho da amostra
+        n += 1000
 
-    return #Retorne sua estimativa
-
-
-
-
-
+    return estimador
 
 def main():
     #Coloque seus testes aqui
-    print(crude())
+    print(crude(42))
     print(hit_or_miss())
     print(control_variate())
     print(importance_sampling())
-
-
-
 
 if __name__ == "___main__":
     main()
