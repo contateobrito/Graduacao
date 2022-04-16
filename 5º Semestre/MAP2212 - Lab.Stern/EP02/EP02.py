@@ -142,28 +142,25 @@ def importance_sampling(Seed = None):
     return n, estimador 
 
 inicio = time.time()
-print("\nBem-vido!\n Analise dos métodos de Monte Carlo para estimar a integração\n")
+print("\nBem-vido!\nAnalise dos métodos de Monte Carlo para estimar a integração.\n")
 
 dic = {"Crude":crude(),"Hit or Miss": hit_or_miss(), "Control Variate":control_variate(),"Importance Sampling":importance_sampling()}
 for i in sorted(dic, key = dic.get):
     print("- %s com n = %d e estimador %.5f" % (i, dic[i][0], dic[i][1]))
 fim = time.time() - inicio
-print("\nTempo de programa: %.4fseg." % (fim))
+print("\nTempo gasto na simulação: %.2fseg.\n" % (fim))
 
 def main():
     #Coloque seus testes aqui
 
-    print("Bem-vido")
-    selecao = input("Selecione e método de monte carlo,1 - Crude\n2 - Hit or Miss\n3 - Control Variates\n4 - Importance Sampling")
-
-    if selecao == 1:
-        print(crude())
-    elif selecao == 2:
-        print(hit_or_miss())
-    elif selecao == 3:
-        print(control_variate())
-    else:
-        print(importance_sampling())
-
+    inicio = time.time()
+    print("\nBem-vido!\nAnalise dos métodos de Monte Carlo para estimar a integração.\nPara início das simulações foi utilizado n inicial igual a 10000 com incrementos de 1000. ")
+    """
+    dic = {"Crude":crude(),"Hit or Miss": hit_or_miss(), "Control Variate":control_variate(),"Importance Sampling":importance_sampling()}
+    for i in sorted(dic, key = dic.get):
+        print("- %s com n = %d e estimador %.5f" % (i, dic[i][0], dic[i][1]))
+    fim = time.time() - inicio
+    print("\nTempo gasto na simulação: %.2fseg.\n" % (fim))
+    """
 if __name__ == "___main__":
     main()
