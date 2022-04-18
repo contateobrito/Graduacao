@@ -152,7 +152,7 @@ print("\nTempo gasto na simulação: %.2fseg.\n" % (fim))
 #print(crude())
 #print(hit_or_miss())
 #print(control_variate())
-print(importance_sampling())
+#print(importance_sampling())
 
 def main():
     #Coloque seus testes aqui
