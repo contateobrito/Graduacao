@@ -43,7 +43,9 @@ def crude(Seed = None):
         #Incremento do tamanho da amostra
         n += 1000
 
-    return estimador
+    #return estimador
+    return n, estimador, erro
+
 
 def hit_or_miss(Seed = None):
     random.seed(Seed)
@@ -70,7 +72,8 @@ def hit_or_miss(Seed = None):
         #Incremento do tamanho da amostra
         n += 1000
 
-    return estimador
+    #return estimador
+    return n, estimador, erro
 
 def control_variate(Seed = None):
     random.seed(Seed)
@@ -105,7 +108,9 @@ def control_variate(Seed = None):
         #Incremento no tamanho da amostra
         n += 1000
 
-    return estimador_final
+
+    #return estimador
+    return n, estimador_final, erro
 
 def importance_sampling(Seed = None):
     random.seed(Seed)
@@ -137,17 +142,20 @@ def importance_sampling(Seed = None):
         #Incremedo no tamanho da amostra
         n += 1000
 
-    return estimador
+    #return estimador
+    return n, estimador, erro
 
 def main():
     inicio = time.time()
     print("\nBem-vido!\nAnalise dos métodos de Monte Carlo para estimar a integração.\nPara início das simulações foi utilizado n inicial igual a 10.000 com incrementos de 1.000.\n")
 
     dic = {"Crude":crude(),"Hit or Miss": hit_or_miss(), "Control Variate":control_variate(),"Importance Sampling":importance_sampling()}
+    
     for i in sorted(dic, key = dic.get):
         print("- %s com n = %d, estimador %.5f e erro = %.5f" % (i, dic[i][0], dic[i][1], dic[i][2]))
+
     fim = time.time() - inicio
     print("\nTempo gasto na simulação: %.2fseg.\n" % (fim))
-
+    
 if __name__ == "__main__":
     main()
