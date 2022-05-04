@@ -12,9 +12,8 @@
 
 \title{EP03 - Geradores Quasi-aleatórios\\
 MAP2212 - Laboratório de Comutação e Simulação}
-\author{Danilo Brito da Silva - Nº USP: 10693250\\
-William Veloso - Nº USP: 10801513}
-\date{24 de Maio de 2021}
+\author{Danilo Brito da Silva - Nº USP: 10693250}
+\date{03 de Maio de 2022}
 
 
 
@@ -37,7 +36,7 @@ Com um gerador de números quasi-aleatórios, verificaremos o que acontece quand
 
 Para cada um dos métodos, vamos gerar $n$ variáveis quasi-aleatórias e armazená-las como vetor, calcular variância e erro padrão. Caso o erro seja maior que $0.0005$, aumentamos o $n$ em $2$ vezes e repetimos o processo. O valor da função $g = \int_{0}^{1}f(x)dx$ será estimado como a média dos valores gerados em cada método.
 
-A implementção das variáveis quasi-aleatórias foi feita atravése da função \textit{halton} de dimensão 1 do R.
+A implementção das variáveis quasi-aleatórias foi feita atravése da função \textit{halton} de dimensão 1 do Python.
 
 
 \section{Método Crud}
@@ -46,10 +45,6 @@ O valor da integral é calculado como sendo a média dos valores da $f(x)$ em $n
 $$
 \hat{g}=\frac{1}{n}\sum_{1}^{n}f(x_i)
 $$
-Utilizando o software R, rodamos o seguinte código:
-\begin{center}
-\includegraphics[scale=.5]{./Figuras/R_crud}\\
-\end{center}
 Dessa forma, obtivemos os seguintes resutados:\\
  $\hat{g} = 0.8066269; n = 81920;    \epsilon = 0.0003640106$
 
@@ -70,9 +65,6 @@ Neste método, geramos pares de pontos $(x_i,y_i)$ e escolhemos uma função aux
   
   
   Executamos o código abaixo no R e obtivemos os seguintes resultados:\\
-\begin{center}
-  \includegraphics[scale=.45]{./Figuras/R_hit}\\
-\end{center}  
 
  $\hat{g} = 0.6972237; n = 1310720;    \epsilon = 0.0004013213$
 
@@ -91,12 +83,6 @@ $$
 
 
 Vamos escolher a função de distribuição Beta($\alpha,\beta$), integrável, razoavelmente proporcional a $f(x)$ e cuja razão $f/Beta$ seja limitada no intervalo $[0,1]$, com $\alpha = 0.9$ e $\beta=1.1$ , ilustrada no gráfico abaixo, e armazenar os resultados de $f(x_i)/k(x_i)$ em um vetor e calcular sua média para chegar na aproximação $\hat{g}$.
-\begin{center}
-  \includegraphics[scale=.55]{./Figuras/plot_beta}\\
-\end{center}  
-\begin{center}
-  \includegraphics[scale=.5]{./Figuras/R_importance}\\
-\end{center} 
 
 Executando os comandos acima no R, obtivemos os seguintes resultados:\\
 $\hat{g} = 0.7881357; n = 10240;    \epsilon = 0.0004244787$
@@ -112,15 +98,10 @@ Com os estimadores $\hat{g} = \frac{1}{n}\sum_{1}^{n}f(x_i)$ e $\hat{g'} = \frac
 
 
 Assim sendo, escolhemos a $\varphi(x) = 1 - 0.5x$, conforme imagem a seguir:
-\begin{center}
-  \includegraphics[scale=.4]{./Figuras/plot_phi}\\
-\end{center}  
 
 
 No R, armazenamos os valores de $f(x)$ e $\varphi(x)$ e suas diferenças em vetores. Assim, estimamos a integral de $f(x)$ como sendo a média de $\varphi(x)$  mais a média da diferença de $f(x)$ e $\varphi(x)$, conforme abaixo:
-\begin{center}
-  \includegraphics[scale=.35]{./Figuras/R_control}\\
-\end{center} 
+ 
 Executando os comandos acima no R, obtivemos os seguintes resultados:\\
 $\hat{g} = 0.7855624; n = 1280;    \epsilon = 0.0004053953$
 

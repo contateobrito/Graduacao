@@ -5,6 +5,7 @@ import time
 import random
 import numpy as np
 from scipy.stats import beta
+from scipy.stats import qmc
 
 #Escreva seu nome e numero USP
 INFO = {10693250:"Danilo Brito da Silva"}
@@ -33,7 +34,7 @@ def crude(Seed = None):
     while erro > 0.0005:
 
         #Criação da matriz uniforme de tamanho n com a função f(x) em cada termo
-        matriz = f(np.random.uniform(0,1,n))
+        matriz = f(qmc.Halton(d=1, scramble = False).random(n)) 
         #Média das variaveis observadas
         estimador = np.mean(matriz)
         #A média das distancias em relação ao valor central 
@@ -43,9 +44,7 @@ def crude(Seed = None):
         #Incremento do tamanho da amostra
         n += 1000
 
-    #return estimador
-    return n, estimador, erro
-
+    return estimador
 
 def hit_or_miss(Seed = None):
     random.seed(Seed)
@@ -58,7 +57,7 @@ def hit_or_miss(Seed = None):
     while erro > 0.0005:
 
         #Criação dos pontos aleatórios
-        matriz = np.random.rand(n,2)
+        matriz = qmc.Halton(d=2, scramble = False).random(n)
         #Aplicação da função f em x
         matriz[:,0] = f(matriz[:,0])
         #Contador de tuplas que tem valor 1 na função indicadora, "y <= f(x)"
@@ -72,8 +71,7 @@ def hit_or_miss(Seed = None):
         #Incremento do tamanho da amostra
         n += 1000
 
-    #return estimador
-    return n, estimador, erro
+    return estimador
 
 def control_variate(Seed = None):
     random.seed(Seed)
@@ -88,7 +86,7 @@ def control_variate(Seed = None):
     while erro > 0.0005:
 
         #Gerador de variavel aleatória
-        va = np.random.uniform(0,1,n)
+        va = qmc.Halton(d=n, scramble = True).random(1)
         #Criação de um vetor com va uniforme de tamanho n com a função f(x) em cada termo
         vetor_x = f(va)
         #Criação de um vetor com va uniforme de tamanho n com a função g(x) = 1 - 0.4x em cada termo
@@ -108,9 +106,7 @@ def control_variate(Seed = None):
         #Incremento no tamanho da amostra
         n += 1000
 
-
-    #return estimador
-    return n, estimador_final, erro
+    return estimador_final
 
 def importance_sampling(Seed = None):
     random.seed(Seed)
@@ -122,12 +118,11 @@ def importance_sampling(Seed = None):
 
     a, b  = 1, 2
     ant = erro = n = 10000
-    matriz = np.random.rand(int(n),2)
-
+    
     while erro > 0.0005:
 
         #Criação de um vetor com va uniforme de tamanho n com a função f(x) em cada termo
-        vetor_x = f(np.random.uniform(0,1,n))
+        vetor_x = f(qmc.Halton(d=1, scramble = False).random(n)) 
         #Criação de um vetor com distribuição beta de tamanho n
         vetor_g = beta.pdf(np.random.beta(a, b, n) ,a ,b)
         #Estimador, média dos pontos observados
@@ -142,20 +137,19 @@ def importance_sampling(Seed = None):
         #Incremedo no tamanho da amostra
         n += 1000
 
-    #return estimador
-    return n, estimador, erro
+    return estimador
 
 def main():
     inicio = time.time()
     print("\nBem-vido!\nAnalise dos métodos de Monte Carlo para estimar a integração.\nPara início das simulações foi utilizado n inicial igual a 10.000 com incrementos de 1.000.\n")
-
-    dic = {"Crude":crude(),"Hit or Miss": hit_or_miss(), "Control Variate":control_variate(),"Importance Sampling":importance_sampling()}
     
+    dic = {"Crude":crude(),"Hit or Miss": hit_or_miss(), "Control Variate":control_variate(),"Importance Sampling":importance_sampling()}
+    print(dic)
+    """
     for i in sorted(dic, key = dic.get):
         print("- %s com n = %d, estimador %.5f e erro = %.5f" % (i, dic[i][0], dic[i][1], dic[i][2]))
-
     fim = time.time() - inicio
     print("\nTempo gasto na simulação: %.2fseg.\n" % (fim))
-    
+    """
 if __name__ == "__main__":
     main()

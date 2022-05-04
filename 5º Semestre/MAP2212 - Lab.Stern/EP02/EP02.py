@@ -43,7 +43,7 @@ def crude(Seed = None):
         #Incremento do tamanho da amostra
         n += 1000
 
-    return estimador
+    return n, estimador, erro
 
 def hit_or_miss(Seed = None):
     random.seed(Seed)
@@ -70,7 +70,7 @@ def hit_or_miss(Seed = None):
         #Incremento do tamanho da amostra
         n += 1000
 
-    return estimador
+    return n, estimador, erro
 
 def control_variate(Seed = None):
     random.seed(Seed)
@@ -105,7 +105,7 @@ def control_variate(Seed = None):
         #Incremento no tamanho da amostra
         n += 1000
 
-    return estimador_final
+    return n, estimador_final, erro
 
 def importance_sampling(Seed = None):
     random.seed(Seed)
@@ -117,7 +117,6 @@ def importance_sampling(Seed = None):
 
     a, b  = 1, 2
     ant = erro = n = 10000
-    matriz = np.random.rand(int(n),2)
 
     while erro > 0.0005:
 
@@ -137,7 +136,7 @@ def importance_sampling(Seed = None):
         #Incremedo no tamanho da amostra
         n += 1000
 
-    return estimador
+    return n, estimador, erro
 
 def main():
     inicio = time.time()
