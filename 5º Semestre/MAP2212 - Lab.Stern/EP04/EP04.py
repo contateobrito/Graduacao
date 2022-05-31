@@ -5,6 +5,9 @@ import math
 import numpy as np
 import scipy.stats as stats
 
+#Escreva seus nomes e numeros USP
+INFO = {10693250:"Danilo Brito",10801513:"William Veloso"}
+
 #####################################################################
 # vetor de observações
 x = np.array([4, 6, 4])
